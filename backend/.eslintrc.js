@@ -1,8 +1,7 @@
 module.exports = 
-
 {
   "rules": {
-      "no-console": 1,
+      "no-console": 0,
       "no-restricted-syntax": "off",
   },
   "env": {
