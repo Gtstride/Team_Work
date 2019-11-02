@@ -1,16 +1,56 @@
 const express = require('express');
 
 const router = express.Router();
+// const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
 
+
+// -----------------------------------Load Model-Starts-Here---------------------------------------------------------------
 const { pool } = require('../models/User');
 
-// ------------------------CREATE---USER-----POST---ROUTE---/auth/create-----BEGINS-HERE-------------------------------------------------
+// -----------------------------------Load-Model-Ends-Here-----------------------------------------------------------------
+
+// -----------------------------------Load-Input-Validation-Starts-Here----------------------------------------------------
+const validateCreateUserInput = require('../validation/user');
+// -----------------------------------Load-Input-Validation-Starts-Here----------------------------------------------------
+
+
+// ---CREATE-USER----------------------------POST-ROUTE---/auth/create-----BEGINS-HERE-------------------------------------
 /**
  * @router POST auth/create-user
  * @description Admin can create a new user
  * @Access Private Route
  */
 router.post('/auth/create', (req, res) => {
+  const { errors, isValid } = validateCreateUserInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  // const hashPassword = bcrypt.hash(hashPassword.password, salt, (err, hassh) => {
+  //   const values = [
+  //     req.body.email,
+  //     req.body.first_name,
+  //     req.body.last_name,
+  //     hashpassword,
+  //     false,
+  //   ];
+  // });
+
+
+  // bcrypt.genSalt(10, (err, salt) => {
+  //   bcrypt.hash(newUser.password, salt, (err, hash) => {
+  //     if (err) throw err;
+  //     newUser.password = hash;
+  //     newUser
+  //       .save()
+  //       .then((user) => res.json(user))
+  //       .catch((err) => console.log(err));
+  //   });
+  // });
+
   const data = {
     user_id: req.body.id,
     first_name: req.body.first_name,
@@ -50,13 +90,15 @@ router.post('/auth/create', (req, res) => {
       res.status(200).send({
         status: 'Successfull',
         message: 'Successfully Created a new employee',
-        result,
+        result: result.rows,
       });
     });
   });
 });
+// ---CREATE-USER----------------------------POST-ROUTE---/auth/create-----ENDS-HERE-----------------------------------
 
-// ------------------------SIGIN---POST---ROUTE---/auth/signin-----------------------------------------------------------------------------------------------------
+
+// ------------------------SIGIN---POST---ROUTE---/auth/signin----------------------------------------------------------------------
 /**
  * @router POST auth/signin
  * @description Admin / Employees can login

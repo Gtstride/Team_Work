@@ -1,7 +1,6 @@
 const express = require('express');
 
 const bodyParser = require('body-parser');
-// const { pool } = require('./models/User');
 
 // Load routes
 const users = require('./routes/users');
@@ -20,8 +19,6 @@ app.get('/', (req, res) => {
     message: 'Welcome to Team Work, Be sure to connect to others',
   });
 });
-
-// app.post('/auth/create', users);
 
 // Route Middleware
 app.use('/api/v1', users);
