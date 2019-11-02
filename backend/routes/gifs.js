@@ -2,8 +2,8 @@
 const express = require('express');
 
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcryptjs');
 
 // ------------------------POST---ROUTE---CREATE-A-GIF---/gifs------------------------------------------------------------------------------------
 /**
