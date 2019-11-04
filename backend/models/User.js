@@ -15,7 +15,7 @@ pool.on('connect', () => {
   console.log('connected to the Postgres Database successfully');
 });
 
-const createTables = () => {
+const createUserTables = () => {
   const Users = `CREATE TABLE IF NOT EXISTS
       users(
         user_id SERIAL PRIMARY KEY NOT NULL,
@@ -48,7 +48,7 @@ const createTables = () => {
 
 // export pool and createTables to be accessible from any where within the application
 module.exports = {
-  createTables,
+  createUserTables,
   pool,
 };
 
