@@ -8,8 +8,9 @@ module.exports = {
     "no-multi-assign": "off",
     "no-param-reassign": "off",
     "no-use-before-define": "off",
-    // "no-unused var": "off",
-    "max-len": "off"
+    "no-unused var": "off",
+    "max-len": "off",
+   "camelcase": 0,
   },
   env: {
     node: true,
