@@ -19,5 +19,5 @@ module.exports = {
   },
 
   parser: "babel-eslint",
-  extends: ["airbnb-base", "plugin:import/errors", "plugin:import/warnings"]
+  extends: ["airbnb-base", "plugin:import/errors" ] //"plugin:import/warnings"]
 };
