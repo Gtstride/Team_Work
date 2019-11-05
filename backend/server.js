@@ -1,6 +1,5 @@
-const express = require('express');
-
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 
 // Load routes
 const users = require('./routes/users');

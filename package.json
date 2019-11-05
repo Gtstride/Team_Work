@@ -6,7 +6,7 @@
   "scripts": {
     "client-install": "npm install --prefix client",
     "create": "node ./backend/models/User createTables",
-    "start": "node ./backend/server.js --exec babel-node --",
+    "start": "nodemon ./backend/server.js --exec babel-node",
     "server": "nodemon ./backend/server.js --exec babel-node --presets babel-preset-env",
     "build": "babel ./backend/server.js --out-dir build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/Gtstride/Team_Work#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.6.0",
     "babel-cli": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -55,6 +56,7 @@
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
     "babel-watch": "^7.0.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
