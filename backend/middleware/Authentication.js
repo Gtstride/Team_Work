@@ -6,14 +6,15 @@ class Authentication {
    * Generate token based on payload.
    * @param {*} user_id
    * @param {*} email
-   * @param {*}
+   * @param {*} is_admin
    */
-  static generateToken(user_id, email) {
+  static generateToken(user_id, email, is_admin) {
     // console.log(user_id, email);
     const token = jwt.sign(
       {
         user_id,
         email,
+        is_admin,
       },
       Index.secretOrKey,
       { expiresIn: 3600 },

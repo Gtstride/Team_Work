@@ -24,10 +24,21 @@ const createTables = () => {
     job_role CHARACTER VARYING(255) NOT NULL,
     department CHARACTER VARYING(255) NOT NULL,
     address CHARACTER VARYING(255) NOT NULL 
-    is_admin BOOLEAN NOT NULL
+    is_admin BOOLEAN FALSE;
   )`;
   pool.query(Users).catch((err) => {
-    // eslint-disable-next-line no-console
+    console.log(err);
+    pool.end();
+  });
+
+  const Articles = `CREATE TABLE IF NOT EXISTS
+  articles(
+    article_id SERIAL PRIMARY KEY NOT NULL,
+    title CAHARACTER VARYING(128) NOT NULL,
+    article CHARACTER VARYING(255) NOT NULL,
+    created_on TIMESTAMP NOT NULL
+  )`;
+  pool.query(Articles).catch((err) => {
     console.log(err);
     pool.end();
   });

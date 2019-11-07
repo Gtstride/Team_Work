@@ -3,8 +3,9 @@ import bodyParser from 'body-parser';
 
 // Load routes
 const users = require('./routes/users');
+const articles = require('./routes/articles');
 // const gifs = require('./routes/gifs');
-// const articles = require('./routes/articles');
+
 
 const app = express();
 
@@ -21,8 +22,8 @@ app.get('/', (req, res) => {
 
 // Route Middleware
 app.use('/api/v1', users);
+app.use('/api/v1', articles);
 // app.use('/api/v1', gifs);
-// app.use('/api/v1', articles);
 
 const port = process.env.PORT || 2100;
 app.listen(port, () => {

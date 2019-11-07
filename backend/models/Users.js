@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 
+
 const connectionString = 'postgresql://postgres:godstime@localhost:5433/team_work';
 
 const pool = new Pool({

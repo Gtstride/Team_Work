@@ -1,6 +1,5 @@
 import express from 'express';
 import Auth from '../controllers/Auth';
-import CreateUser from '../controllers/CreateUser';
 
 const router = express.Router();
 
@@ -10,7 +9,7 @@ const router = express.Router();
  * @description Admin can create an employee user user
  * @Access Private Route
  */
-router.post('/auth/create', CreateUser.register);
+router.post('/auth/create', Auth.register);
 
 /**
  * @router POST auth/signin
