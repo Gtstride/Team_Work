@@ -3,6 +3,8 @@ import Hash from '../config/hash';
 import validateSignInInput from '../validation/signin';
 import Authentication from '../middleware/Authentication';
 
+const validateCreateUserInput = require('../validation/user');
+
 class Auth {
   static async login(req, res) {
     try {
@@ -46,6 +48,70 @@ class Auth {
       return res.status(400).json({
         status: 'Unsuccessful',
         error: error.message,
+      });
+    }
+  }
+
+  static async register(req, res) {
+    try {
+      const { errors, isValid } = validateCreateUserInput(req.body);
+
+      // Check Validation
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
+      const {
+        user_id,
+        first_name,
+        last_name,
+        email,
+        password,
+        gender,
+        job_role,
+        department,
+        address,
+      } = req.body;
+      const hashPassword = Hash.hashPassword(req.body.password);
+
+      // const data = {
+      //   user_id,
+      //   first_name,
+      //   last_name,
+      //   email,
+      //   hashPassword,
+      //   gender,
+      //   job_role,
+      //   department,
+      //   address,
+      // };
+
+      const createQuery = `INSERT INTO users( user_id, first_name, last_name, email, password, gender, job_role, department, address
+        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
+      const values = [
+        user_id,
+        first_name,
+        last_name,
+        email,
+        hashPassword,
+        gender,
+        job_role,
+        department,
+        address,
+      ];
+
+      const { rows } = await db.query(createQuery, values);
+      res.status(200).send({
+        status: 'Successfull',
+        message: 'Successfully Created a new employee',
+        result: rows,
+      });
+      // });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: 'Unsuccessful',
+        error: 'Something went wrong, try again',
       });
     }
   }

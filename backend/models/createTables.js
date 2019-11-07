@@ -24,7 +24,7 @@ const createTables = () => {
     job_role CHARACTER VARYING(255) NOT NULL,
     department CHARACTER VARYING(255) NOT NULL,
     address CHARACTER VARYING(255) NOT NULL 
-    is_admin BOOLEAN NOT NULL
+    is_admin BOOLEAN FALSE;
   )`;
   pool.query(Users).catch((err) => {
     // eslint-disable-next-line no-console

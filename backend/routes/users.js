@@ -10,7 +10,7 @@ const router = express.Router();
  * @description Admin can create an employee user user
  * @Access Private Route
  */
-router.post('/auth/create', CreateUser.register);
+router.post('/auth/create', Auth.register);
 
 /**
  * @router POST auth/signin
