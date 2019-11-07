@@ -1,18 +1,86 @@
 import db from '../models/Index';
-import Hash from '../config/hash';
 import validateSignInInput from '../validation/signin';
 import Authentication from '../middleware/Authentication';
-
-const validateCreateUserInput = require('../validation/user');
+import Hash from '../config/hash';
+import validateCreateUserInput from '../validation/user';
+// const validateCreateUserInput = require('../validation/user');
 
 class Auth {
+  static async register(req, res) {
+    try {
+      const { errors, isValid } = validateCreateUserInput(req.body);
+
+      // Check Validation
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
+      const {
+        first_name,
+        last_name,
+        email,
+        gender,
+        job_role,
+        department,
+        address,
+      } = req.body;
+      const hashPassword = Hash.hashPassword(req.body.password);
+
+      const createQuery = `INSERT INTO users( first_name, last_name, email, password, gender, job_role, department, address, is_admin
+        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
+      const values = [
+        first_name,
+        last_name,
+        email,
+        hashPassword,
+        gender,
+        job_role,
+        department,
+        address,
+        false,
+      ];
+
+      const { rows } = await db.query(createQuery, values);
+      const user = rows[0];
+      const { user_id, is_admin } = rows[0];
+
+      const token = Authentication.generateToken(user_id, email, is_admin);
+
+      res.status(201).send({
+        status: 'Successfull',
+        data: {
+          message: 'User account successfully created.',
+          token,
+          ...user,
+        },
+        // result: rows,
+      });
+      // });
+    } catch (error) {
+      if (error.routine === '_bt_check_unique') {
+        // console.log(error);
+        return res.status(409).json({
+          status: 'Unsuccessful',
+          error: 'User already exist or your input fields ain\'t entered correctly',
+        });
+      }
+      return res.status(400).json({
+        status: 'There\'s been an error',
+        error: 'Something went wrong, please try again',
+      });
+    }
+  }
+
   static async login(req, res) {
     try {
       const { errors, isValid } = validateSignInInput(req.body);
 
       // Check Input Validation
       if (!isValid) {
-        return res.status(400).json(errors);
+        return res.status(400).json({
+          status: 'error',
+          errors: errors.details[0].message,
+        });
       }
 
       const text = 'SELECT * FROM users WHERE email=$1';
@@ -41,77 +109,13 @@ class Auth {
         data: {
           token,
           user_id,
-          email,
+          // email,
         },
       });
     } catch (error) {
       return res.status(400).json({
         status: 'Unsuccessful',
         error: error.message,
-      });
-    }
-  }
-
-  static async register(req, res) {
-    try {
-      const { errors, isValid } = validateCreateUserInput(req.body);
-
-      // Check Validation
-      if (!isValid) {
-        return res.status(400).json(errors);
-      }
-
-      const {
-        user_id,
-        first_name,
-        last_name,
-        email,
-        password,
-        gender,
-        job_role,
-        department,
-        address,
-      } = req.body;
-      const hashPassword = Hash.hashPassword(req.body.password);
-
-      // const data = {
-      //   user_id,
-      //   first_name,
-      //   last_name,
-      //   email,
-      //   hashPassword,
-      //   gender,
-      //   job_role,
-      //   department,
-      //   address,
-      // };
-
-      const createQuery = `INSERT INTO users( user_id, first_name, last_name, email, password, gender, job_role, department, address
-        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
-      const values = [
-        user_id,
-        first_name,
-        last_name,
-        email,
-        hashPassword,
-        gender,
-        job_role,
-        department,
-        address,
-      ];
-
-      const { rows } = await db.query(createQuery, values);
-      res.status(200).send({
-        status: 'Successfull',
-        message: 'Successfully Created a new employee',
-        result: rows,
-      });
-      // });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        status: 'Unsuccessful',
-        error: 'Something went wrong, try again',
       });
     }
   }
