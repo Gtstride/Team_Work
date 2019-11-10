@@ -7,7 +7,7 @@ module.exports = function validateCreateArticleInput(data) {
   data.title = !isEmpty(data.title) ? data.title : '';
   data.article = !isEmpty(data.article) ? data.article : '';
 
-  if (!Validator.isLength(data.first_name, { min: 2, max: 40 })) {
+  if (!Validator.isLength(data.title, { min: 2, max: 40 })) {
     errors.title = 'Title seems too long';
   }
 
