@@ -5,6 +5,7 @@ module.exports = function validateCreateUserInput(data) {
   const errors = {};
 
   data.first_name = !isEmpty(data.first_name) ? data.first_name : '';
+  data.last_name = !isEmpty(data.last_name) ? data.last_name : '';
   data.email = !isEmpty(data.email) ? data.email : '';
   data.password = !isEmpty(data.password) ? data.password : '';
   data.job_role = !isEmpty(data.job_role) ? data.job_role : '';
@@ -17,6 +18,11 @@ module.exports = function validateCreateUserInput(data) {
   if (Validator.isEmpty(data.first_name)) {
     errors.first_name = 'First Name field is required';
   }
+
+  if (Validator.isEmpty(data.last_name)) {
+    errors.last_name = 'Last Name field is required';
+  }
+
 
   if (!Validator.isEmail(data.email)) {
     errors.email = 'Email is invalid';
@@ -39,7 +45,7 @@ module.exports = function validateCreateUserInput(data) {
   }
 
   if (Validator.isEmpty(data.department)) {
-    errors.depaartment = 'Department of employee is required';
+    errors.department = 'Department of employee is required';
   }
 
   return {

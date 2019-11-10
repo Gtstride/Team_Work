@@ -1,4 +1,5 @@
 import express from 'express';
+import Article from '../controllers/ArticleController';
 
 const router = express.Router();
 
@@ -8,48 +9,22 @@ const router = express.Router();
  * @description Employees can create an article
  * @Access Public
  */
-router.post('/articles', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'Emplooyees can create an article right here.',
-  });
-});
+router.post('/articles', Article.createArticle);
 
-/**
- * @router POST /articles/articleId/comment
- * @description Employees can comment on their colleagues article
- */
-router.post('/articles/articleId/comment', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'Others can comment on their colleagues article here.',
-  });
-});
 
 /**
  * @router PATCH /articles/:id
- * @description Users can Edit an article
- * @Access Public
+ * @description Employees can Edit their article
+ * @Access Private
  */
-router.patch('/articles/:id', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can edit your article here.',
-  });
-});
-
+router.patch('/article/:id', Article.modifyArticle);
 
 /**
- * @router GET /articles
- * @description Employees can view  all article or gifs showing the most recently posted articles or gifs first
+ * @router GET all articles
+ * @description Employees can view all articles
  * @Access Public
  */
-router.get('/articles', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can get all article here.',
-  });
-});
+router.get('/article', Article.getAllArticle);
 
 
 /**
@@ -57,25 +32,15 @@ router.get('/articles', (req, res) => {
  * @description Employees can view a specific article
  * @Access Public
  */
-router.get('/articles/:id', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can get all article here.',
-  });
-});
+router.get('/articles/:id', Article.getArticleById);
 
 
 /**
  * @router DELETE /articles/:id
  * @description Employees can delete their article
- * @Access Public
+ * @Access Private
  */
-router.delete('/articles/:id', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can delete your article here.',
-  });
-});
+router.delete('/article/:id', Article.deleteArticle);
 
 
 module.exports = router;

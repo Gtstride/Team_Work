@@ -3,9 +3,8 @@ import validateSignInInput from '../validation/signin';
 import Authentication from '../middleware/Authentication';
 import Hash from '../config/hash';
 import validateCreateUserInput from '../validation/user';
-// const validateCreateUserInput = require('../validation/user');
 
-class Auth {
+class AuthController {
   static async register(req, res) {
     try {
       const { errors, isValid } = validateCreateUserInput(req.body);
@@ -16,35 +15,21 @@ class Auth {
       }
 
       const {
-        first_name,
-        last_name,
-        email,
-        gender,
-        job_role,
-        department,
-        address,
+        first_name, last_name, email, gender, job_role, department, address,
       } = req.body;
       const hashPassword = Hash.hashPassword(req.body.password);
 
-      const createQuery = `INSERT INTO users( first_name, last_name, email, password, gender, job_role, department, address, is_admin
+      const createUserQuery = `INSERT INTO users( first_name, last_name, email, password, gender, job_role, department, address, is_admin
         ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
-      const values = [
-        first_name,
-        last_name,
-        email,
-        hashPassword,
-        gender,
-        job_role,
-        department,
-        address,
-        false,
-      ];
+      const userValues = [first_name, last_name, email, hashPassword, gender, job_role, department, address, false];
 
-      const { rows } = await db.query(createQuery, values);
+      const { rows } = await db.query(createUserQuery, userValues);
       const user = rows[0];
       const { user_id, is_admin } = rows[0];
 
-      const token = Authentication.generateToken(user_id, email, is_admin);
+      const token = Authentication.generateToken({ user_id, email, is_admin }, process.env.SECRET_KEY, {
+        expiresIn: 3600,
+      }, (errors, token));
 
       res.status(201).send({
         status: 'Successfull',
@@ -53,20 +38,19 @@ class Auth {
           token,
           ...user,
         },
-        // result: rows,
       });
-      // });
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
         // console.log(error);
         return res.status(409).json({
           status: 'Unsuccessful',
-          error: 'User already exist or your input fields ain\'t entered correctly',
+          // error: 'User already exist or your input fields ain\'t entered correctly',
+          error: error.message,
         });
       }
       return res.status(400).json({
         status: 'There\'s been an error',
-        error: 'Something went wrong, please try again',
+        error: error.message,
       });
     }
   }
@@ -100,15 +84,15 @@ class Auth {
         });
       }
 
-      const { user_id, email } = rows[0];
+      const { userId, email } = rows[0];
 
-      const token = Authentication.generateToken(user_id, email);
+      const token = Authentication.generateToken(userId, email);
       // return success message
       return res.status(200).json({
         status: 'success',
         data: {
           token,
-          user_id,
+          userId,
           // email,
         },
       });
@@ -121,4 +105,4 @@ class Auth {
   }
 }
 
-export default Auth;
+export default AuthController;
