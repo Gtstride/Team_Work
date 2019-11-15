@@ -8,7 +8,7 @@ import cors from 'cors';
 const users = require('./routes/users');
 const articles = require('./routes/articles');
 const gifs = require('./routes/gifs');
-// const comments = require('./routes/comments');
+const comments = require('./routes/comments');
 
 // Instantiate express here
 const app = express();
@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1', users);
 app.use('/api/v1', articles);
 app.use('/api/v1', gifs);
-// app.use('/api/v1', comments);
+app.use('/api/v1', comments);
 
 const port = process.env.PORT || 2100;
 app.listen(port, () => {

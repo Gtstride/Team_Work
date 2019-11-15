@@ -11,6 +11,7 @@ module.exports = {
     "no-unused var": "off",
     "max-len": "off",
    "camelcase": 0,
+   "radix": 0,
   },
   env: {
     node: true,
