@@ -5,10 +5,10 @@ import fileUpload from 'express-fileupload';
 import cors from 'cors';
 
 // Load routes
-const users = require('./routes/users');
-const articles = require('./routes/articles');
-const gifs = require('./routes/gifs');
-const comments = require('./routes/comments');
+const users = require('./backend/routes/users');
+const articles = require('./backend/routes/articles');
+const gifs = require('./backend/routes/gifs');
+const comments = require('./backend/routes/comments');
 
 // Instantiate express here
 const app = express();
