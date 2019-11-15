@@ -2,5 +2,5 @@ node_modules
 package-lock.json
 .cloudinary.config
 .env
-.cloudinary.config
 tempFile
+.coveralls.yml

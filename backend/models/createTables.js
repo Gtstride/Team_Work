@@ -60,12 +60,12 @@ const createTables = () => {
 
   const ArticleCommentTable = `CREATE TABLE IF NOT EXISTS
   articleComments(
-    commentId SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    comment_id SERIAL PRIMARY KEY NOT NULL UNIQUE,
       comment VARCHAR(300) NOT NULL,
       created_on VARCHAR(50) NOT NULL,
       user_id INT NOT NULL,
       article_id INT NOT NULL,
-      FOREIGN KEY(user_id) REFERENCES article(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+      FOREIGN KEY(user_id) REFERENCES articles(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
   )`;
   pool.query(ArticleCommentTable).catch((err) => {
     console.log(err);

@@ -1,232 +1,283 @@
-// import db from '../models/Index';
-// import validateCreateArticleInput from '../validation/createArticle';
-// import validateModifyArticleInput from '../validation/modifyArticle';
-// import Authentication from '../middleware/Authentication';
+import db from '../models/Index';
+import validateCreateCommentInput from '../validation/createComment';
+import Authentication from '../middleware/Authentication';
 
-// class CommentController {
-//   static async createArticle(req, res) {
-//     try {
-//       const { errors, isValid } = validateCreateArticleInput(req.body);
+class CommentController {
+  static async createArticleComment(req, res) {
+    // const id = parseInt(req.params.id);
+    // console.log(id);
+    // const { comment, user_id } = req.body;
+    // // const comment_id = [0];
 
-//       // Check Validation
-//       if (!isValid) {
-//         return res.status(400).json(errors);
-//       }
+    // try {
+    //   const { errors, isValid } = validateCreateCommentInput(req.body);
 
-//       const { title, article } = req.body;
-//       const article_id = [0];
+    //   // Check Validation
+    //   if (!isValid) {
+    //     return res.status(400).json(errors);
+    //   }
 
-//       const create = `INSERT INTO article( title, article, created_on
-//         ) VALUES($1, $2, $3) RETURNING *`;
-//       const values = [title, article, new Date().toLocaleString()];
+    //   const check = 'SELECT * FROM articles WHERE article_id = $1';
+    //   const checkValue = [id];
+    //   const checkQuery = await db.query(check, checkValue);
 
-//       const createQuery = await db.query(create, values);
-//       const token = Authentication.generateToken(
-//         { article_id },
-//         process.env.SECRET_KEY,
-//         {
-//           expiresIn: 3600,
-//         },
-//         (errors, token),
-//       );
+    //   const comments = `INSERT INTO articleComments( comment, created_on, user_id, article_id
+    //     ) VALUES($1, $2, 43, $4) RETURNING *`;
 
-//       // console.log(create);
-//       res.status(201).json({
-//         status: 'Success',
-//         token,
-//         data: {
-//           message: 'Article successfully posted',
-//           article_id: createQuery.rows[0].article_id,
-//           title: createQuery.rows[0].title,
-//           article: createQuery.rows[0].article,
-//           created_on: createQuery.rows[0].created_on,
-//         },
-//       });
-//     } catch (error) {
-//       if (error) {
-//         // console.log(error);
-//         return res.status(404).json({
-//           status: 'Bad request',
-//           error: error.message,
-//         });
-//       }
-//     }
-//   }
+    //   const values = [comment, new Date().toLocaleString(), user_id, id];
 
-//   static async modifyArticle(req, res) {
-//     try {
-//       const { errors, isValid } = validateModifyArticleInput(req.body);
+    //   const createCommentQuery = await db.query(comments, values);
 
-//       // Check Validation
-//       if (!isValid) {
-//         return res.status(400).json(errors);
-//       }
+    //   const token = Authentication.generateToken(
+    //     { comment_id },
+    //     process.env.SECRET_KEY,
+    //     {
+    //       expiresIn: 3600,
+    //     },
+    //     (errors, token),
+    //   );
 
-//       const id = parseInt(10, req.params.id);
+    //   // console.log(create);
+    //   res.status(201).json({
+    //     status: 'Success',
+    //     data: {
+    //       message: 'Comment successfully created',
+    //       createdOn: createCommentQuery.rows[0].createdon,
+    //       articleTitle: checkQuery.rows[0].title,
+    //       article: checkQuery.rows[0].article,
+    //       comment: createCommentQuery.rows[0].comment,
+    //     },
+    //   });
+    // } catch (error) {
+    //   if (error) {
+    //     // console.log(error);
+    //     return res.status(404).json({
+    //       status: 'There\'s been an error',
+    //       error: error.message,
+    //     });
+    //   }
+    // }
+    const id = parseInt(req.params.id);
+    const { comment, authorId } = req.body;
+    try {
+      jwt.verify(req.token, process.env.SECRET_KEY, async (err, data) => {
+        if (err) {
+          return res.status(403).json({
+            status: 'error',
+            error: 'incorrect token',
+          });
+        }
 
-//       const token = Authentication.verifyToken(
-//         req.token,
-//         process.env.SECRET_KEY,
-//         async (error, token) => {
-//           if (error) {
-//             return res.status(403).json({
-//               status: 'Error',
-//               error: error.message,
-//               token,
-//             });
-//           }
-//         },
-//       );
+        if (!comment || !authorId) {
+          return res.status(400).json({
+            status: 'error',
+            error: 'all fields are required'
+          });
+        }
 
-//       const check = 'SELECT * FROM article WHERE article_id = $1';
-//       const checkValue = [id];
-//       const checkQuery = await db.query(check, checkValue);
+        const check = 'SELECT * FROM articles WHERE articleid=$1';
+        const checkValue = [id];
+        const checkQuery = await db.query(check, checkValue);
 
-//       const title = req.body.title || checkQuery.rows[0].title;
-//       const article = req.body.article || checkQuery.rows[0].article;
 
-//       const modify = 'UPDATE article SET title=$1, article=$2, created_on=$3 WHERE article_id=$4 RETURNING *';
-//       // console.log(modify);
-//       const value = [title, article, new Date().toLocaleString(), id];
-//       const modifyQuery = await db.query(modify, value);
-//       // console.log(token);
-//       res.status(200).json({
-//         status: 'Success',
-//         token,
-//         data: {
-//           message: 'Article succcessfully updated',
-//           title,
-//           article,
-//           modified_on: modifyQuery.rows[0].created_on,
-//         },
-//       });
-//     } catch (error) {
-//       if (error) {
-//         return res.status(400).json({
-//           status: 'Error',
-//           error,
-//         });
-//       }
-//     }
-//   }
+        const comments = `INSERT INTO article_comments (comment, createdOn, authorId, articleId)
+                                VALUES($1, $2, $3, $4) RETURNING *`;
+        const values = [comment, new Date().toLocaleString(), authorId, id];
+        const commentQuery = await pool.query(comments, values);
+                
 
-//   static async deleteArticle(req, res) {
-//     try {
-//       const id = Number(req.params.id);
-//       const token = Authentication.verifyToken(
-//         req.headers.token,
-//         process.env.SECRET_KEY,
-//         async (error, data) => {
-//           if (error) {
-//             return res.status(403).json({
-//               status: 'Error',
-//               message: 'Incorrect token supplied',
-//               error: error.message,
-//               data,
-//             });
-//           }
-//         },
-//       );
+        res.status(201).json({
+          status: 'success',
+          data: {
+            message: 'Comment successfully created',
+            createdOn: commentQuery.rows[0].createdon,
+            articleTitle: checkQuery.rows[0].title,
+            article: checkQuery.rows[0].article,
+            comment: commentQuery.rows[0].comment
+          }
+        })
+      })
+    }
+    catch (e) {
+      console.log(e)
+    }
 
-//       const removeArticle = 'DELETE FROM article WHERE article_id = $1';
-//       const value = [id];
-//       const removeArticleQuery = await db.query(removeArticle, value);
+  }
 
-//       res.status(200).json({
-//         status: 'Success',
-//         token,
-//         data: {
-//           message: `Article ${id} succcessfully deleted`,
-//           removeArticleQuery: removeArticleQuery.rows[0],
-//         },
-//       });
-//     } catch (error) {
-//       if (error) {
-//         return res.status(400).json({
-//           status: 'Error',
-//           error: error.message,
-//         });
-//       }
-//     }
-//   }
+  // static async modifyArticle(req, res) {
+  //   try {
+  //     const { errors, isValid } = validateModifyArticleInput(req.body);
 
-//   static async getAllArticle(req, res) {
-//     try {
-//       const token = Authentication.verifyToken(
-//         req.token,
-//         process.env.SECRET_KEY,
-//         async (error, data) => {
-//           if (error) {
-//             return res.status(403).json({
-//               status: 'Error',
-//               message: 'Incorrect token supplied',
-//               error: error.message,
-//               data,
-//             });
-//           }
-//         },
-//       );
+  //     // Check Validation
+  //     if (!isValid) {
+  //       return res.status(400).json(errors);
+  //     }
 
-//       const getArticles = 'SELECT * FROM article';
-//       const getAllArticlesQuery = await db.query(getArticles);
+  //     const id = parseInt(10, req.params.id);
 
-//       res.status(200).json({
-//         token,
-//         status: 'Success',
-//         data: {
-//           message: 'All article succcessfully retrieved',
-//           getAllArticlesQuery: getAllArticlesQuery.rows,
-//         },
-//       });
-//     } catch (error) {
-//       if (error) {
-//         return res.status(400).json({
-//           status: 'Error',
-//           error: error.message,
-//         });
-//       }
-//     }
-//   }
+  //     const token = Authentication.verifyToken(
+  //       req.token,
+  //       process.env.SECRET_KEY,
+  //       async (error, token) => {
+  //         if (error) {
+  //           return res.status(403).json({
+  //             status: 'Error',
+  //             error: error.message,
+  //             token,
+  //           });
+  //         }
+  //       },
+  //     );
 
-//   static async getArticleById(req, res) {
-//     try {
-//       const id = parseInt(10, req.params.id);
-//       const token = Authentication.verifyToken(
-//         req.token,
-//         process.env.SECRET_KEY,
-//         async (error, data) => {
-//           if (error) {
-//             return res.status(403).json({
-//               status: 'Error',
-//               message: 'Incorrect token supplied',
-//               error: error.message,
-//               data,
-//             });
-//           }
-//         },
-//       );
+  //     const check = 'SELECT * FROM article WHERE article_id = $1';
+  //     const checkValue = [id];
+  //     const checkQuery = await db.query(check, checkValue);
 
-//       const getArticle = 'SELECT * FROM article WHERE article_id = $1';
-//       const value = [id];
-//       const getArticleQuery = await db.query(getArticle, value);
+  //     const title = req.body.title || checkQuery.rows[0].title;
+  //     const article = req.body.article || checkQuery.rows[0].article;
 
-//       res.status(200).json({
-//         token,
-//         status: 'Success',
-//         data: {
-//           message: `Article ${id} succcessfully retrieved`,
-//           getArticleQuery: getArticleQuery.rows,
-//         },
-//       });
-//     } catch (error) {
-//       if (error) {
-//         return res.status(400).json({
-//           status: 'Error',
-//           error: error.message,
-//         });
-//       }
-//     }
-//   }
-// }
+  //     const modify = 'UPDATE article SET title=$1, article=$2, created_on=$3 WHERE article_id=$4 RETURNING *';
+  //     // console.log(modify);
+  //     const value = [title, article, new Date().toLocaleString(), id];
+  //     const modifyQuery = await db.query(modify, value);
+  //     // console.log(token);
+  //     res.status(200).json({
+  //       status: 'Success',
+  //       token,
+  //       data: {
+  //         message: 'Article succcessfully updated',
+  //         title,
+  //         article,
+  //         modified_on: modifyQuery.rows[0].created_on,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     if (error) {
+  //       return res.status(400).json({
+  //         status: 'Error',
+  //         error,
+  //       });
+  //     }
+  //   }
+  // }
 
-// export default CommentController;
+  // static async deleteArticle(req, res) {
+  //   try {
+  //     const id = Number(req.params.id);
+  //     const token = Authentication.verifyToken(
+  //       req.headers.token,
+  //       process.env.SECRET_KEY,
+  //       async (error, data) => {
+  //         if (error) {
+  //           return res.status(403).json({
+  //             status: 'Error',
+  //             message: 'Incorrect token supplied',
+  //             error: error.message,
+  //             data,
+  //           });
+  //         }
+  //       },
+  //     );
+
+  //     const removeArticle = 'DELETE FROM article WHERE article_id = $1';
+  //     const value = [id];
+  //     const removeArticleQuery = await db.query(removeArticle, value);
+
+  //     res.status(200).json({
+  //       status: 'Success',
+  //       token,
+  //       data: {
+  //         message: `Article ${id} succcessfully deleted`,
+  //         removeArticleQuery: removeArticleQuery.rows[0],
+  //       },
+  //     });
+  //   } catch (error) {
+  //     if (error) {
+  //       return res.status(400).json({
+  //         status: 'Error',
+  //         error: error.message,
+  //       });
+  //     }
+  //   }
+  // }
+
+  // static async getAllArticle(req, res) {
+  //   try {
+  //     const token = Authentication.verifyToken(
+  //       req.token,
+  //       process.env.SECRET_KEY,
+  //       async (error, data) => {
+  //         if (error) {
+  //           return res.status(403).json({
+  //             status: 'Error',
+  //             message: 'Incorrect token supplied',
+  //             error: error.message,
+  //             data,
+  //           });
+  //         }
+  //       },
+  //     );
+
+  //     const getArticles = 'SELECT * FROM article';
+  //     const getAllArticlesQuery = await db.query(getArticles);
+
+  //     res.status(200).json({
+  //       token,
+  //       status: 'Success',
+  //       data: {
+  //         message: 'All article succcessfully retrieved',
+  //         getAllArticlesQuery: getAllArticlesQuery.rows,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     if (error) {
+  //       return res.status(400).json({
+  //         status: 'Error',
+  //         error: error.message,
+  //       });
+  //     }
+  //   }
+  // }
+
+  // static async getArticleById(req, res) {
+  //   try {
+  //     const id = parseInt(10, req.params.id);
+  //     const token = Authentication.verifyToken(
+  //       req.token,
+  //       process.env.SECRET_KEY,
+  //       async (error, data) => {
+  //         if (error) {
+  //           return res.status(403).json({
+  //             status: 'Error',
+  //             message: 'Incorrect token supplied',
+  //             error: error.message,
+  //             data,
+  //           });
+  //         }
+  //       },
+  //     );
+
+  //     const getArticle = 'SELECT * FROM article WHERE article_id = $1';
+  //     const value = [id];
+  //     const getArticleQuery = await db.query(getArticle, value);
+
+  //     res.status(200).json({
+  //       token,
+  //       status: 'Success',
+  //       data: {
+  //         message: `Article ${id} succcessfully retrieved`,
+  //         getArticleQuery: getArticleQuery.rows,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     if (error) {
+  //       return res.status(400).json({
+  //         status: 'Error',
+  //         error: error.message,
+  //       });
+  //     }
+  //   }
+  // }
+}
+
+export default CommentController;
