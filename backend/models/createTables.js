@@ -32,7 +32,7 @@ const createTables = () => {
   });
 
   const ArticlesTable = `CREATE TABLE IF NOT EXISTS
-  article(
+  articles(
     article_id SERIAL PRIMARY KEY NOT NULL UNIQUE,
     title VARCHAR(128) NOT NULL,
     article VARCHAR(3000) NOT NULL,
@@ -44,30 +44,30 @@ const createTables = () => {
     pool.end();
   });
 
-  const ArticleCommentTable = `CREATE TABLE IF NOT EXISTS
-  articleComment(
-    commentId SERIAL PRIMARY KEY NOT NULL UNIQUE,
-      comment VARCHAR(300) NOT NULL,
-      created_on VARCHAR(50) NOT NULL,
-      authorId INT NOT NULL,
-      article_id INT NOT NULL,
-      FOREIGN KEY(article_id) REFERENCES article(article_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  const GifTable = `CREATE TABLE IF NOT EXISTS
+  gifs(
+    gif_id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    image VARCHAR(500) NOT NULL,
+    gif_title VARCHAR(50) NOT NULL,
+    gif_user_id INT NOT NULL,
+    gif_created_on VARCHAR(50) NOT NULL,
+    FOREIGN KEY(gif_user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
   )`;
-  pool.query(ArticleCommentTable).catch((err) => {
+  pool.query(GifTable).catch((err) => {
     console.log(err);
     pool.end();
   });
 
-  const GifTable = `CREATE TABLE IF NOT EXISTS
-  gif(
-    gifId SERIAL PRIMARY KEY NOT NULL UNIQUE,
-    image VARCHAR(500) NOT NULL,
-    gifTitle VARCHAR(50) NOT NULL,
-    gifAuthorId INT NOT NULL,
-    gifCreatedOn VARCHAR(50) NOT NULL,
-    FOREIGN KEY(gifAuthorId) REFERENCES users(authorId) ON DELETE CASCADE ON UPDATE CASCADE
+  const ArticleCommentTable = `CREATE TABLE IF NOT EXISTS
+  articleComments(
+    commentId SERIAL PRIMARY KEY NOT NULL UNIQUE,
+      comment VARCHAR(300) NOT NULL,
+      created_on VARCHAR(50) NOT NULL,
+      user_id INT NOT NULL,
+      article_id INT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES article(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
   )`;
-  pool.query(GifTable).catch((err) => {
+  pool.query(ArticleCommentTable).catch((err) => {
     console.log(err);
     pool.end();
   });

@@ -1,4 +1,7 @@
 import express from 'express';
+import GifController from '../controllers/GifController';
+// import Authentication from '../middleware/Authentication';
+
 
 const router = express.Router();
 
@@ -8,51 +11,15 @@ const router = express.Router();
  * @description Employees can post / create a gif
  * @Access Public
  */
-router.post('/gifs', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'The almighty gif route, posted by emplooyees.',
-  });
-});
+router.post('/gifs', GifController.postGif);
 
-
-// ------------------------POST-ROUTE----EMPLOYEES- CAN-COMMENT-ON-THEIR-COLLEAGUES-GIF-------/gifs---------------------------------------------------
-/**
- * @router POST /gifs/gifId/comment
- * @description Employees can comment on their colleagues gif post
- * @Access Public
- */
-router.post('/gifs/gifId/comment', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'The comment on gifs by employees.',
-  });
-});
 
 /**
  * @router GET /gifs/:id
  * @description Employees can view a specific gif
  * @Access Public
  */
-router.get('/gifs/:id', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can get a gif here.',
-  });
-});
-
-
-/**
- * @router DELETE /gifs/:id/comment
- * @description Employees can delete their gif post
- * @Access Public
- */
-router.delete('/gifs/:id/comment', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can delete your gif here.',
-  });
-});
+router.get('/gifs/:id', GifController.getOneGif);
 
 
 /**
@@ -60,11 +27,14 @@ router.delete('/gifs/:id/comment', (req, res) => {
  * @description Employees can delete their gif
  * @Access Public
  */
-router.delete('/gifs/:id', (req, res) => {
-  res.status(200).json({
-    status: 'Successful',
-    Message: 'You can delete your gif here.',
-  });
-});
+router.delete('/gifs/:id', GifController.deleteGif);
+
+
+/**
+ * @router GET /gifs
+ * @description Employees can see all gifs
+ * @Access Public
+ */
+router.get('/gifs', GifController.getGif);
 
 module.exports = router;

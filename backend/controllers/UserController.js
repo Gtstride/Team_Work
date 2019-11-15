@@ -1,10 +1,10 @@
 import db from '../models/Index';
-import validateSignInInput from '../validation/signin';
+import validateLoginInput from '../validation/signin';
 import Authentication from '../middleware/Authentication';
 import Hash from '../config/hash';
 import validateCreateUserInput from '../validation/user';
 
-class AuthController {
+class UserController {
   static async register(req, res) {
     try {
       const { errors, isValid } = validateCreateUserInput(req.body);
@@ -22,6 +22,7 @@ class AuthController {
       const createUserQuery = `INSERT INTO users( first_name, last_name, email, password, gender, job_role, department, address, is_admin
         ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
       const userValues = [first_name, last_name, email, hashPassword, gender, job_role, department, address, false];
+      // const userValues = [first_name, last_name, email, hashPassword, gender, job_role, department, address, true];
 
       const { rows } = await db.query(createUserQuery, userValues);
       const user = rows[0];
@@ -57,7 +58,7 @@ class AuthController {
 
   static async login(req, res) {
     try {
-      const { errors, isValid } = validateSignInInput(req.body);
+      const { errors, isValid } = validateLoginInput(req.body);
 
       // Check Input Validation
       if (!isValid) {
@@ -84,15 +85,15 @@ class AuthController {
         });
       }
 
-      const { userId, email } = rows[0];
+      const { user_id, email } = rows[0];
 
-      const token = Authentication.generateToken(userId, email);
+      const token = Authentication.generateToken(user_id, email);
       // return success message
       return res.status(200).json({
         status: 'success',
         data: {
           token,
-          userId,
+          user_id,
           // email,
         },
       });
@@ -105,4 +106,4 @@ class AuthController {
   }
 }
 
-export default AuthController;
+export default UserController;
