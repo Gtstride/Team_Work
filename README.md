@@ -4,8 +4,10 @@ Teamwork is an internal social network for employees of an organization. The goa
 
 # Way Farer
 
-[![Build Status]()]()--- To come soon
-[![Coverage Status]()]()
+[![Build Status](https://travis-ci.org/Gtstride/Team_Work.svg?branch=develop)](https://travis-ci.org/Gtstride/Team_Work)
+
+[![Coverage Status](https://coveralls.io/repos/github/Gtstride/Team_Work/badge.svg?branch=develop)](https://coveralls.io/github/Gtstride/Team_Work?branch=develop)
+
 [![Maintainability]()]()
 
 ## Minimum Required Features
