@@ -29,6 +29,7 @@ export default {
     });
   },
   secretOrKey: 'godstime',
+  secretOrPrivateKey: 'godstime',
 };
 
 require('make-runnable');

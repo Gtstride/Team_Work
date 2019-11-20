@@ -1,14 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import fileUpload from 'express-fileupload';
+// import fileUpload from 'express-fileupload';
+
 import cors from 'cors';
 
 // Load routes
-const users = require('./backend/routes/users');
-const articles = require('./backend/routes/articles');
-const gifs = require('./backend/routes/gifs');
-const comments = require('./backend/routes/comments');
+const users = require('./routes/users');
+const articles = require('./routes/articles');
+const gifs = require('./routes/gifs');
+const comments = require('./routes/comments');
 
 // Instantiate express here
 const app = express();
@@ -30,10 +31,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Handle file-upload config here
-app.use(fileUpload({
-  useTempFiles: true,
-  // tempFileDir: '/tmp/',
-}));
+// app.use(fileUpload({
+//   useTempFiles: true,
+//   // tempFileDir: '/tmp/',
+// }));
 
 // HOME ROUTE
 app.get('/', (req, res) => {
@@ -41,8 +42,11 @@ app.get('/', (req, res) => {
     status: 200,
     message: 'Welcome to Team Work API, Be sure to connect to others',
   });
+  res.status(200).json({
+    status: 'Error',
+    message: 'Page Not found on this server',
+  });
 });
-
 
 // Route Middleware
 app.use('/api/v1', users);
@@ -50,7 +54,9 @@ app.use('/api/v1', articles);
 app.use('/api/v1', gifs);
 app.use('/api/v1', comments);
 
-const port = process.env.PORT || 2100;
-app.listen(port, () => {
+
+const port = process.env.PORT || 8080;
+module.exports = app.listen(port, () => {
   console.log(`Application is live and runs on server http://localhost:${port}`);
 });
+// chai.request('http://localhost:5000');

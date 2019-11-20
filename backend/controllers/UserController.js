@@ -62,7 +62,7 @@ class UserController {
 
       // Check Input Validation
       if (!isValid) {
-        return res.status(400).json({
+        return res.status(401).json({
           status: 'error',
           errors: errors.details[0].message,
         });
@@ -107,3 +107,7 @@ class UserController {
 }
 
 export default UserController;
+
+/* To seed admin, i would put the admin email where i have the SELECT option, instead of
+saying user = $1, i would replace with the admin email
+*/
