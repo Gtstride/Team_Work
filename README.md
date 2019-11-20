@@ -8,19 +8,20 @@ Teamwork is an internal social network for employees of an organization. The goa
 
 [![Maintainability]()]()
 
-## Minimum Required Features
+
+### Minimum Required Features
 ```sh
-- Admin can create an employee user account -- _Admin create employee's user account_
-- Admin/Employees can -- sign up
-- Employees can create and share gifs with other colleagues. -- _create a gifs_
+- Admin can create an employee user account: Admin create employee's user account`
+- Admin/Employees can: sign up
+- Employees can create and share gifs with other colleagues: create a gifs
 - Employees can write and/or share articles with colleagues on topics of interest to
-  them  -- _Write and share articles with colleagues_
-- Employees can edit their articles _Employees can edit their article_
-- Employees can delete their articles -- _Employees can delete their articles_
-- Employees can delete their gifs post _Delete their gifs post_
-- Employees can comment on their colleagues gif post _comment on their colleagues gif post_
-- Employees can view all articles _view all articles_ showing _the most recently posted articles first_
-- Employees can view a specific article _dEmployees can view a specific article_
+  them: Write and share articles with colleagues
+- Employees can edit their articles: Employees can edit their article
+- Employees can delete their articles: Employees can delete their articles
+- Employees can delete their gifs post: Delete their gifs post
+- Employees can comment on their colleagues gif post: comment on their colleagues gif post
+- Employees can view all articles: view all articles :showing: the most recently posted articles first
+- Employees can view a specific article: Employees can view a specific article
 ```
 
 ## Technologies
