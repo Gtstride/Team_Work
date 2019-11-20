@@ -1,6 +1,6 @@
 {
   "name": "team_work",
-  "version": "1.0.0",
+  "version": "12.2.0",
   "description": "Internal social network for employees of an organisation",
   "main": "server.js",
   "scripts": {
