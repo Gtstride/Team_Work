@@ -9,7 +9,9 @@
     "start": "nodemon ./backend/server.js --exec babel-node",
     "server": "nodemon ./backend/server.js --exec babel-node --presets babel-preset-env",
     "build": "babel ./backend/server.js --out-dir build",
-    "test": "mocha --require @babel/register --require @babel/polyfill ./backend/tests/articleTest.js"
+    "test": "mocha --require @babel/register --require @babel/polyfill ./backend/tests/test.js",
+    "test:coverage" : "mocha  --coverage",
+    "test:coveralls": "mocha --coverage --coverageReporters=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -70,6 +72,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "babel-watch": "^7.0.0",
+    "coveralls": "^3.0.7",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
