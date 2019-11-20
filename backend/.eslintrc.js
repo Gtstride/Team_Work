@@ -16,9 +16,9 @@ module.exports = {
   env: {
     node: true,
     browser: true,
-    es6: true
+    es6: true,
+    "mocha": true,
   },
-
   parser: "babel-eslint",
-  extends: ["airbnb-base", "plugin:import/errors" ] //"plugin:import/warnings"]
+  extends: ["airbnb-base"],
 };
