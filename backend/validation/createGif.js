@@ -12,12 +12,12 @@ module.exports = function validateCreateGifInput(data) {
   }
 
   if (Validator.isEmpty(data.gif_title)) {
-    errors.gif_title = 'Image Title field is required';
+    errors.gif_title = 'Gif Title field is required';
   }
 
-  if (Validator.is(data.image)) {
-    errors.image = 'Please upload an image';
-  }
+  // if (Validator.isEmpty(data.image)) {
+  //   errors.image = 'Please upload an image';
+  // }
 
   return {
     errors,

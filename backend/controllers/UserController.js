@@ -68,7 +68,7 @@ class UserController {
         });
       }
 
-      const text = 'SELECT * FROM users WHERE email=$1';
+      const text = 'SELECT * FROM users WHERE email = $1';
       const { rows } = await db.query(text, [req.body.email]);
 
       if (!rows[0]) {
@@ -88,18 +88,19 @@ class UserController {
       const { user_id, email } = rows[0];
 
       const token = Authentication.generateToken(user_id, email);
+
       // return success message
       return res.status(200).json({
         status: 'success',
         data: {
           token,
           user_id,
-          // email,
+          email,
         },
       });
     } catch (error) {
       return res.status(400).json({
-        status: 'Unsuccessful',
+        status: 'Error',
         error: error.message,
       });
     }

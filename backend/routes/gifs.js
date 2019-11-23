@@ -1,7 +1,6 @@
 import express from 'express';
 import GifController from '../controllers/GifController';
-// import Authentication from '../middleware/Authentication';
-
+// import Authentication from '../middleware/Authentication'
 
 const router = express.Router();
 
@@ -11,8 +10,11 @@ const router = express.Router();
  * @description Employees can post / create a gif
  * @Access Public
  */
-router.post('/gifs', GifController.postGif);
+// router.post('/gifs', GifController.postGif);
 
+// router.post('/gifs', upload.single('image'), (req, res) => {
+//   console.log('req.file :', req.file);
+// });
 
 /**
  * @router GET /gifs/:id

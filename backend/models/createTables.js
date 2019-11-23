@@ -50,7 +50,7 @@ const createTables = () => {
     image VARCHAR(500) NOT NULL,
     gif_title VARCHAR(50) NOT NULL,
     gif_user_id INT NOT NULL,
-    gif_created_on VARCHAR(50) NOT NULL,
+    created_on VARCHAR(50) NOT NULL,
     FOREIGN KEY(gif_user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
   )`;
   pool.query(GifTable).catch((err) => {
