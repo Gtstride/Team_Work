@@ -12,6 +12,7 @@ module.exports = {
     "max-len": "off",
    "camelcase": 0,
    "radix": 0,
+   "no-unused-expressions": 0,
   },
   env: {
     node: true,

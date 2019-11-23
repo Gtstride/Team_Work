@@ -25,8 +25,11 @@ describe(`POST ${createArticleUrl}`, () => {
       .send(article)
       .end((err, res) => {
         const { body } = res;
+        expect(body).to.be.an('object');
         expect(article).to.be.an('object');
-        expect(body).to.be.a('array');
+        // expect(body).to.be.of.type('arrary');
+        expect(res.status).to.equal(200).to.be(true);
+        // expect(body).to.be.equal('object');
         done();
       });
   });

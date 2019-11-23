@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import Index from '../models/Index';
 
-dotenv.config();
 class Authentication {
   /**
    * Generate token based on payload.
@@ -18,7 +16,8 @@ class Authentication {
         email,
         is_admin,
       },
-      process.env.SECRET_KEY,
+      Index.secretOrKey,
+      // process.env.SECRET_KEY,
       { expiresIn: 3600 },
     );
     return token;
@@ -31,10 +30,9 @@ class Authentication {
    * @param {*} res
    * @param {*} next
    */
-
   static async verifyToken(req, res, next) {
-    const { token } = req.headers.authorization || req.body;
-    // console.log(token);
+    const token = req.headers.token || req.body.token;
+
     // check if token is provided
     if (!token) {
       return res.status(403).json({
@@ -63,17 +61,16 @@ class Authentication {
 
       return next();
     } catch (errors) {
-      console.log(errors);
       if (errors.name === 'TokenExpiredError') {
         return res.status(409).json({
           status: 'error',
-          error: 'Token Expired, please re-log in',
+          error: 'Token Expired, please re log in',
         });
       }
-      return res.status(400).json({
-        status: 400,
-        error: 'something went wrong, retry or contact admin',
-      });
+      // return res.status(400).json({
+      //   status: 400,
+      //   errors,
+      // });
     }
   }
 }
